@@ -1,0 +1,15 @@
+# node modules
+node_modules
+
+# testing
+_output
+coverage
+
+# logs
+local.log
+npm-debug.log
+
+# text editor
+.idea/
+.vscode/
+.npmrc
