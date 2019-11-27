@@ -2,13 +2,30 @@
   "name": "backend-coding-test",
   "version": "1.0.0",
   "description": "A coding assessment for Xendit backend interviews",
+  "engines": {
+    "node": "^8.12.0",
+    "npm": "^6.4.1"
+  },
   "main": "index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
-    "start": "node index.js"
+    "test": "npm run test:app && npm run test:client",
+    "start": "node index.js",
+    "lint:app": "eslint . --ext .js",
+    "lint:app:staged": "eslint .",
+    "lint:app:fix": "npm run lint:app -- --fix",
+    "lint:app:fix:staged": "eslint . --fix",
+    "lint": "npm run lint:app",
+    "lint:fix": "npm run lint:app:fix",
+    "test:app": "node -v && jest --maxWorkers=10 --forceExit --detectOpenHandles --testPathPattern=\"^((?!e2e/).)*$\"",
+    "test:app:pattern": "jest --maxWorkers=10 --forceExit --detectOpenHandles",
+    "test:app:unit": "jest --testPathPattern=\"^((?!tests/)(?!\\.int\\.test).)*$\"",
+    "test:app:integration": "npm run test:app -- --testPathPattern=int.test",
+    "test:app:component": "npm run test:app -- --testPathPattern=tests/component",
+    "coverage:app": "npm run test:app -- --coverage",
+    "coverage": "npm run coverage:app"
   },
   "keywords": [
     "Xendit"
@@ -16,12 +33,66 @@
   "author": "Bo",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "^4.16.4",
-    "sqlite3": "^4.0.6"
+    "body-parser": "^1.18.3",
+    "winston": "^2.4.2",
+    "express": "^4.16.3",
+    "hbs": "^4.0.5",
+    "sqlite3": "^4.1.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "client/**/*.{js,jsx}": [
+      "npm run lint:client:js:staged --"
+    ],
+    "client/**/*.scss": [
+      "npm run lint:client:scss:staged --"
+    ],
+    "**!(client)/**/*.{js,jsx}": [
+      "npm run lint:app:staged --"
+    ]
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^8.1.0",
+    "babel-eslint": "^8.2.6",
+    "eslint": "^6.2.2",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-skyscanner": "^3.0.0",
+    "eslint-config-standard": "^14.1.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-skyscanner-dates": "^1.0.9",
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^23.6.0",
+    "jest-fetch-mock": "^1.1.1",
+    "lint-staged": "^7.3.0",
     "mocha": "^6.1.4",
+    "nock": "^11.3.4",
     "supertest": "^4.0.2"
+  },
+  "jest": {
+    "cacheDirectory": "/tmp",
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/client/",
+      "<rootDir>/app/config/"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 80,
+        "branches": 80,
+        "lines": 80,
+        "functions": 80
+      }
+    }
   }
 }
