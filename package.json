@@ -11,7 +11,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "npm run test:app && npm run test:client",
+    "test": "npm run test:app",
     "start": "node index.js",
     "lint:app": "eslint . --ext .js",
     "lint:app:staged": "eslint .",
