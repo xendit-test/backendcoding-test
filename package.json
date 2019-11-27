@@ -46,12 +46,6 @@
     }
   },
   "lint-staged": {
-    "client/**/*.{js,jsx}": [
-      "npm run lint:client:js:staged --"
-    ],
-    "client/**/*.scss": [
-      "npm run lint:client:scss:staged --"
-    ],
     "**!(client)/**/*.{js,jsx}": [
       "npm run lint:app:staged --"
     ]
