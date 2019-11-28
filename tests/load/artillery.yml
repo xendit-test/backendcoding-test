@@ -1,0 +1,46 @@
+config:
+  target: ""
+  environments:
+    local:
+      target: 'http://localhost:8010'
+      http:
+        pool: 300
+      phases: [
+      {"duration": 300, "arrivalRate": 100},
+      ]
+    sandbox:
+      target: ''
+      http:
+        pool: 300
+      phases: [
+      {"duration": 600, "arrivalRate": 300},
+      ]
+    prod:
+      target: ''
+      http:
+        pool: 100
+      phases: [
+      {"duration": 300, "arrivalRate": 50},
+      {"duration": 300, "arrivalRate": 100},
+      {"duration": 300, "arrivalRate": 150},
+      {"duration": 300, "arrivalRate": 200},
+      {"duration": 300, "arrivalRate": 300},
+      ]
+  variables:
+    rideID:
+      - 1
+      - 2
+      - 3
+scenarios:
+  - name: "Search ride with random ride ID"
+    weight: 1
+    flow:
+      - get:
+          followRedirect: false
+          url: "/rides?id={{ $randomString() }}"
+  - name: "Redirect with fixed ride ID"
+    weight: 5
+    flow:
+      - get:
+          followRedirect: false
+          url: "/rides?id={{ rideID }}"
