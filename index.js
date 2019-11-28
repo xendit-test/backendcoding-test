@@ -1,10 +1,10 @@
 const express = require('express');
-const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 const winston = require('winston');
+const bodyParser = require('body-parser');
 
-const db = new sqlite3.Database(':memory:');
-const api = require('./src/app')(db);
-const buildSchemas = require('./src/schemas');
+const database = require('./utils/db');
+const ridesRouter = require('./routes');
 const config = require('./config');
 
 const { env } = config;
@@ -15,12 +15,16 @@ const port = 8010;
 winston.info(`Starting app in ${env} environment.`);
 winston.info(`Config: ${JSON.stringify(config, null, 2)}`);
 
+app.set('views', path.join(__dirname, 'routes'));
 
-// const bodyParser = require('body-parser');
-// const jsonParser = bodyParser.json();
+app.use(bodyParser.json());
+app.use(bodyParser.text());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-db.serialize(() => {
-    buildSchemas(db);
-    app.use('/', api);
-    app.listen(port, () => console.log(`App started and listening on port ${port}`));
-});
+// setup database
+database.serialize();
+
+app.use('/', ridesRouter);
+app.listen(port, () => console.log(`App started and listening on port ${port}`));
+
+module.exports = app;

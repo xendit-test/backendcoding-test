@@ -22,10 +22,92 @@ This express app exposes the following endpoints:
 - http://localhost:8010/health
 - http://localhost:8010/
 
-Endpoint - 
-  /rides - POST - Call this endpoint to store new ride to database
-  /rides - GET - Call this endpoint to get all rides details (Paginated)
-  /rides/1 - GET - Call this endpoint to get specific ride details
+## Record limits
+
+* If no limit is specified, return results with a default limit.
+* To get records 51 through 75 do this:
+    * http://localhost:8010/rides?limit=25&offset=50
+    * offset=50 means, ‘skip the first 50 records’
+    * limit=25 means, ‘return a maximum of 25 records’
+
+Information about record limits and total available count should also be included in the response. Example:
+
+    {
+        "metadata": {
+            "resultset": {
+                "count": 227,
+                "offset": 25,
+                "limit": 25
+            }
+        },
+        "results": []
+    }
+
+## Request & Response Examples
+
+### API Resources
+
+  - [GET /rides](#get-rides)
+  - [GET /rides/[id]](#get-rideid)
+  - [POST /rides/](#post-rides)
+
+### GET /rides
+
+Example: http://localhost:8010/rides
+
+Request body: 
+
+    {
+    	"start" : 0,
+    	"limit": 10
+    }
+
+Response body:
+
+    {
+        "start_lat" : 30,
+        	"start_long": 60,
+        	"end_lat" : 70,
+        	"end_long" : 100,
+        	"rider_name" : "rajesh",
+        	"driver_name" : "john",
+        	"driver_vehicle": "toyota"
+    }
+
+### GET /rides/[id]
+
+Example: http://localhost:8081/[id]
+
+Response body:
+
+    {
+            "start_lat" : 30,
+        	"start_long": 60,
+        	"end_lat" : 70,
+        	"end_long" : 100,
+        	"rider_name" : "rajesh",
+        	"driver_name" : "john",
+        	"driver_vehicle": "toyota"
+    }
+
+
+
+### POST /posts/
+
+Example: Create – POST  http://localhost:8081/
+
+Request body:
+
+    {
+    	"start_lat" : 30,
+    	"start_long": 60,
+    	"end_lat" : 70,
+    	"end_long" : 100,
+    	"rider_name" : "rajesh",
+    	"driver_name" : "john",
+    	"driver_vehicle": "toyota"
+    }
+
 
 ### Prerequisites
 
