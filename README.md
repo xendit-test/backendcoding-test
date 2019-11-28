@@ -162,6 +162,16 @@ All npm commands can be run inside the docker container started by docker-compos
 - `npm start`: the command that the dockerfile uses to run the app in production.
 - `npm start:client`: Runs the webpack dev server that serves static files.
 
+# Running Load test
+
+First you need artillery installed 
+
+`npm install -g artillery`
+
+and you can start the load test with
+
+`artillery run -e [environment] artillery.yml`
+
 ## Contributing
 
 Email: Raj Gannamaneni
