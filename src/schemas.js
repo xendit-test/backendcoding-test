@@ -1,4 +1,5 @@
 module.exports = (db) => {
+    console.log('creating db');
     const createRideTableSchema = `
         CREATE TABLE Rides
         (

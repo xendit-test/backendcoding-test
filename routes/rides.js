@@ -32,8 +32,9 @@ ridesRouter.get('/rides',
 
 ridesRouter.get('/rides/:id', async (req, res) => {
     try {
-        const rows = await database.query(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`);
-        res.json(rows);
+        await database.query(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`).then((response) => {
+            res.json(response);
+        });
     } catch (error) {
         res.send(error.stack || error.message);
     }
