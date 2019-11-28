@@ -1,9 +1,19 @@
 const express = require('express');
+const { check, validationResult } = require('express-validator/check');
 
 const ridesRouter = express.Router();
 const database = require('../utils/db');
 
-ridesRouter.get('/rides', async (req, res) => {
+ridesRouter.get('/rides',
+    [
+        check('start', 'only integers in length between 0 & 999 are accepted').isInt({ min: 0, max: 999 }),
+        check('limit', 'only integers in length between 0 & 999 are accepted').isInt({ min: 0, max: 999 }),
+    ],
+    async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.mapped() });
+    }
     try {
         const {
             start, limit,
@@ -17,6 +27,7 @@ ridesRouter.get('/rides', async (req, res) => {
     } catch (error) {
         res.send(error.stack || error.message);
     }
+    return null;
 });
 
 ridesRouter.get('/rides/:id', async (req, res) => {
@@ -28,7 +39,14 @@ ridesRouter.get('/rides/:id', async (req, res) => {
     }
 });
 
-ridesRouter.post('/rides', async (req, res) => {
+ridesRouter.post('/rides', [
+        check('start_lat', 'only integers in length between 0 & 999 are accepted').isInt({ min: 0, max: 999 }),
+    ],
+    async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.mapped() });
+    }
     try {
         const startLatitude = Number(req.body.start_lat);
         const startLongitude = Number(req.body.start_long);
