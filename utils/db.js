@@ -16,17 +16,14 @@ const databaseConnector = {
     },
 
     query: async (query) => {
-        winston.info(query);
-        try {
-            await db.all(query, (err, rows) => {
-                if (err) {
-                    throw new Error('Internal server error');
+        return new Promise(async function(resolve, reject) {
+            await db.all(query, function(err, rows)  {
+                if(err) reject("Read error: " + err.message);
+                else {
+                    resolve(rows);
                 }
-                return rows;
-            });
-        } catch (e) {
-            throw e;
-        }
+            })
+        });
     },
 
     save: async (query, values) => {
